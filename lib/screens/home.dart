@@ -9,8 +9,6 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../drawer/drawer.dart';
 
-
-
 class ImagePickerWidget extends StatefulWidget {
   @override
   _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
@@ -18,11 +16,8 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? _image; // Variable to store the picked image
-  
 
-ZoomDrawerController zoomDrawerController = ZoomDrawerController();
-  
-
+  ZoomDrawerController zoomDrawerController = ZoomDrawerController();
 
   // Function to open the image picker
   Future<void> _getImage(ImageSource source) async {
@@ -41,30 +36,32 @@ ZoomDrawerController zoomDrawerController = ZoomDrawerController();
     }
   }
 
-String modelPath = 'assets/best_model.tflite';
-    String labelsPath = 'assets/labels.txt';
+  String modelPath = 'assets/best_model.tflite';
+  String labelsPath = 'assets/labels.txt';
 
 //   Future<void> loadModel() async {
 //   final Model model = Interpreter.fromAsset(modelPath,labelsPath);
-  
+
 //   model.loadModel();
 // }
 
-Future<void> loadModel() async {
-  try {
-    ByteData modelData = await rootBundle.load(modelPath);
-    ByteData labelsData = await rootBundle.load(labelsPath);
+  Future<void> loadModel() async {
+    try {
+      ByteData modelData = await rootBundle.load(modelPath);
+      ByteData labelsData = await rootBundle.load(labelsPath);
 
-    final interpreter = await Interpreter.fromBuffer(modelData.buffer as Uint8List);
-    List<String> labels = utf8.decode(labelsData.buffer.asUint8List()).split('\n');
+      final interpreter =
+          await Interpreter.fromBuffer(modelData.buffer as Uint8List);
+      List<String> labels =
+          utf8.decode(labelsData.buffer.asUint8List()).split('\n');
 
-    print("Model loaded successfully");
-  } catch (e) {
-    print("Error loading model: $e");
+      print("Model loaded successfully");
+    } catch (e) {
+      print("Error loading model: $e");
+    }
   }
-}
 
-@override
+  @override
   void initState() {
     super.initState();
     loadModel();
@@ -78,7 +75,8 @@ Future<void> loadModel() async {
         leading: IconButton(
           icon: const Icon(Icons.menu), // Add the drawer icon here
           onPressed: () {
-            zoomDrawerController.toggle!(); // Open/close the zoomable drawer on icon tap
+            zoomDrawerController
+                .toggle!(); // Open/close the zoomable drawer on icon tap
           },
         ),
       ),
@@ -86,25 +84,28 @@ Future<void> loadModel() async {
         controller: zoomDrawerController,
         style: DrawerStyle.defaultStyle,
         borderRadius: 24.0,
-      showShadow: false,
-      angle: -12.0,
-      openCurve: Curves.fastOutSlowIn,
-      closeCurve: Curves.bounceIn,
-      drawerShadowsBackgroundColor: Colors.grey.shade300,
-      slideWidth: MediaQuery.of(context).size.width * 0.65,
+        showShadow: false,
+        angle: -12.0,
+        openCurve: Curves.fastOutSlowIn,
+        closeCurve: Curves.bounceIn,
+        drawerShadowsBackgroundColor: Colors.grey.shade300,
+        slideWidth: MediaQuery.of(context).size.width * 0.65,
         menuScreen: const MyYoungDrawer(),
         mainScreen: Column(
           children: [
-            const SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             const Text('Image'),
-            const SizedBox(height: 100,),
+            const SizedBox(
+              height: 100,
+            ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  
                   if (_image != null) ...[
                     // If an image is selected, display it
                     Image.file(_image!),
@@ -113,7 +114,9 @@ Future<void> loadModel() async {
                 ],
               ),
             ),
-            const Center(child: SelectableText('Text results will be displaced here, you can select and copy'))
+            const Center(
+                child: SelectableText(
+                    'Text results will be displaced here, you can select and copy'))
           ],
         ),
       ),
