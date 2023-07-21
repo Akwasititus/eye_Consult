@@ -1,10 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
 
 import '../drawer/drawer.dart';
+
+
 
 class ImagePickerWidget extends StatefulWidget {
   @override
@@ -13,6 +18,7 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? _image; // Variable to store the picked image
+  
 
 ZoomDrawerController zoomDrawerController = ZoomDrawerController();
   
@@ -35,11 +41,40 @@ ZoomDrawerController zoomDrawerController = ZoomDrawerController();
     }
   }
 
+String modelPath = 'assets/best_model.tflite';
+    String labelsPath = 'assets/labels.txt';
+
+//   Future<void> loadModel() async {
+//   final Model model = Interpreter.fromAsset(modelPath,labelsPath);
+  
+//   model.loadModel();
+// }
+
+Future<void> loadModel() async {
+  try {
+    ByteData modelData = await rootBundle.load(modelPath);
+    ByteData labelsData = await rootBundle.load(labelsPath);
+
+    final interpreter = await Interpreter.fromBuffer(modelData.buffer as Uint8List);
+    List<String> labels = utf8.decode(labelsData.buffer.asUint8List()).split('\n');
+
+    print("Model loaded successfully");
+  } catch (e) {
+    print("Error loading model: $e");
+  }
+}
+
+@override
+  void initState() {
+    super.initState();
+    loadModel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Fuck Here')),
+        title: const Text('Eye Consult'),
         leading: IconButton(
           icon: const Icon(Icons.menu), // Add the drawer icon here
           onPressed: () {
@@ -61,7 +96,7 @@ ZoomDrawerController zoomDrawerController = ZoomDrawerController();
         mainScreen: Column(
           children: [
             const SizedBox(height: 20,),
-            const Text('Fuck you here'),
+            const Text('Image'),
             const SizedBox(height: 100,),
             Padding(
               padding: const EdgeInsets.all(15.0),
@@ -113,7 +148,7 @@ ZoomDrawerController zoomDrawerController = ZoomDrawerController();
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Please select fuck you'),
+          const Text('Options'),
           _buildRoundedButton(
             'Gallery',
             () {
