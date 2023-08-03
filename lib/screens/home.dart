@@ -1,11 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
+
+import 'package:tflite_v2/tflite_v2.dart';
 
 import '../drawer/drawer.dart';
 
@@ -39,32 +39,52 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   String modelPath = 'assets/best_model.tflite';
   String labelsPath = 'assets/labels.txt';
 
-//   Future<void> loadModel() async {
-//   final Model model = Interpreter.fromAsset(modelPath,labelsPath);
 
-//   model.loadModel();
-// }
+  List? restults;
+  String confidence = "";
+  String name = "";
+  String number = "";
 
-  Future<void> loadModel() async {
+
+   loadModel() async {
     try {
-      ByteData modelData = await rootBundle.load(modelPath);
-      ByteData labelsData = await rootBundle.load(labelsPath);
-
-      final interpreter =
-          await Interpreter.fromBuffer(modelData.buffer as Uint8List);
-      List<String> labels =
-          utf8.decode(labelsData.buffer.asUint8List()).split('\n');
-
-      print("Model loaded successfully");
+      var result = await Tflite.loadModel(
+        model: modelPath,
+        labels: labelsPath,
+        );
     } catch (e) {
       print("Error loading model: $e");
     }
+  }
+
+  applymodelonimage(File, file) async {
+    var res = await Tflite.runModelOnImage(
+      path: file.path,
+      numResults: 2,
+      threshold: 0.5,
+      imageMean: 127.5,
+      imageStd: 127.5,
+      );
+
+      setState(() {
+        restults = res!;
+
+        String str = restults![0]["labels"];
+        name = str.substring(2);
+        confidence = restults != null ? (restults![0]["confidence"]*100.0.toString().substring(0,2)) + "%" : "nothing";
+      });
   }
 
   @override
   void initState() {
     super.initState();
     loadModel();
+    print("loadModel()  $loadModel()");
+    print("loadModel()  $loadModel");
+    print("applymodelonimage()  $applymodelonimage()");
+    print("applymodelonimage()  $applymodelonimage");
+    print('Name: $name \nconfidence $confidence ');
+    print('restults: $restults ');
   }
 
   @override
@@ -96,7 +116,8 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             const SizedBox(
               height: 20,
             ),
-            const Text('Image'),
+             SelectableText(
+                    'Name: $name \nconfidence $confidence '),
             const SizedBox(
               height: 100,
             ),
@@ -114,9 +135,9 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 ],
               ),
             ),
-            const Center(
+             Center(
                 child: SelectableText(
-                    'Text results will be displaced here, you can select and copy'))
+                    'Name: $name \nconfidence $confidence '))
           ],
         ),
       ),
