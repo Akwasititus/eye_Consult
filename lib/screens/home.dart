@@ -36,6 +36,10 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     }
   }
 
+  
+
+
+
   String modelPath = 'assets/best_model.tflite';
   String labelsPath = 'assets/labels.txt';
 
