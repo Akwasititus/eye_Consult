@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:tflite_v2/tflite_v2.dart';
 
@@ -16,6 +17,12 @@ class ImagePickerWidget extends StatefulWidget {
 
 class _ImagePickerWidgetState extends State<ImagePickerWidget> {
   File? _image; // Variable to store the picked image
+
+  String _result = 'Upload Image...';
+
+  void shareResult() {
+    Share.share('Results: $_result');
+  }
 
   ZoomDrawerController zoomDrawerController = ZoomDrawerController();
 
@@ -36,59 +43,40 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
     }
   }
 
-  
+  Future<void> detectGlaucoma() async {
+    if (_image == null) return;
 
+    // Run inference using the TensorFlow Lite model
+    var recognitions = await Tflite.runModelOnImage(
+      path: _image!.path,
+      imageMean: 0.0,
+      imageStd: 255.0,
+      numResults: 2, // Adjust based on your model's output
+      threshold: 0.2, // Adjust based on your model's output
+    );
 
-
-  String modelPath = 'assets/best_model.tflite';
-  String labelsPath = 'assets/labels.txt';
-
-
-  List? restults;
-  String confidence = "";
-  String name = "";
-  String number = "";
-
-
-   loadModel() async {
-    try {
-      var result = await Tflite.loadModel(
-        model: modelPath,
-        labels: labelsPath,
-        );
-    } catch (e) {
-      print("Error loading model: $e");
-    }
+    // Process the inference results
+    setState(() {
+      _result = recognitions![0]['label'];
+    });
   }
 
-  applymodelonimage(File, file) async {
-    var res = await Tflite.runModelOnImage(
-      path: file.path,
-      numResults: 2,
-      threshold: 0.5,
-      imageMean: 127.5,
-      imageStd: 127.5,
-      );
+  // String modelPath = 'assets/model.tflite';
+  // String labelsPath = 'assets/labels.txt';
 
-      setState(() {
-        restults = res!;
-
-        String str = restults![0]["labels"];
-        name = str.substring(2);
-        confidence = restults != null ? (restults![0]["confidence"]*100.0.toString().substring(0,2)) + "%" : "nothing";
-      });
+  Future<void> loadModel() async {
+    await Tflite.loadModel(
+      model: 'assets/model.tflite',
+      labels: 'assets/labels.txt',
+    );
   }
 
   @override
   void initState() {
     super.initState();
+    // Load the TensorFlow Lite model and labels
     loadModel();
-    print("loadModel()  $loadModel()");
-    print("loadModel()  $loadModel");
-    print("applymodelonimage()  $applymodelonimage()");
-    print("applymodelonimage()  $applymodelonimage");
-    print('Name: $name \nconfidence $confidence ');
-    print('restults: $restults ');
+    detectGlaucoma();
   }
 
   @override
@@ -120,8 +108,68 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             const SizedBox(
               height: 20,
             ),
-             SelectableText(
-                    'Name: $name \nconfidence $confidence '),
+
+            /// result should be here
+            //SelectableText('Name: $name \nconfidence $confidence '),
+            Row(
+              children: [
+                Container(
+                  height: 50,
+                  width: 150,
+                  margin: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: TextButton(
+                    onPressed: () {
+                      detectGlaucoma();
+                    },
+                    child: Text(
+                      'Detect Glaucoma',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Container(
+                  height: 50,
+                  width: 150,
+                  margin: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: TextButton(
+                    onPressed: () {
+                      shareResult();
+                    },
+                    child: Text(
+                      'Share Results',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Table(
+                border: TableBorder.all(),
+                children: [
+                  TableRow(children: [
+                    TableCell(
+                        child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text('Results: $_result', style: TextStyle(fontSize: 20, color: Colors.black),),
+                      ),
+                    ))
+                  ])
+                ],
+              ),
+            ),
             const SizedBox(
               height: 100,
             ),
@@ -131,17 +179,12 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (_image != null) ...[
-                    // If an image is selected, display it
-                    Image.file(_image!),
-                    const SizedBox(height: 10),
-                  ],
+                  
+                  _image != null ? Image.file(_image!) : Placeholder(),
                 ],
               ),
             ),
-             Center(
-                child: SelectableText(
-                    'Name: $name \nconfidence $confidence '))
+            
           ],
         ),
       ),

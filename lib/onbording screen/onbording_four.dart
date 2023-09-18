@@ -25,7 +25,7 @@ class _OnbordingFourState extends State<OnbordingFour> {
                         bottomLeft: Radius.circular(15.0))),
                 child: Center(
                   child: Image.asset(
-                    'assets/images/navigate.png',height: 200,
+                    'assets/img3.jpg',height: 200,
                   ),
                 )),
           ),
@@ -33,7 +33,7 @@ class _OnbordingFourState extends State<OnbordingFour> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Next to Navigate',
+                Text('Share Predicted Results',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',
@@ -41,7 +41,7 @@ class _OnbordingFourState extends State<OnbordingFour> {
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF1E1E1E))),
                 Text(
-                    'Select the "next" button to move to a different quote.',
+                    'Please Feel free to share the outcome with your love ones',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',

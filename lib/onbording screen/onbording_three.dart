@@ -25,7 +25,7 @@ class _OnbordingThreeState extends State<OnbordingThree> {
                         bottomLeft: Radius.circular(15.0))),
                 child: Center(
                   child: Image.asset(
-                    'assets/images/copy.png',height: 200,
+                    'assets/img1.jpg',height: 200,
                   ),
                 )),
           ),
@@ -33,7 +33,7 @@ class _OnbordingThreeState extends State<OnbordingThree> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Copy the Quote',
+                Text('Uploading of Images',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',
@@ -41,7 +41,7 @@ class _OnbordingThreeState extends State<OnbordingThree> {
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF1E1E1E))),
                 Text(
-                    'You have the liberty to replicate the quote and share it on any platform or in any location of your preference by copying the text.',
+                    'Avoid uploading fake images',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',

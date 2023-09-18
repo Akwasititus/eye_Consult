@@ -25,7 +25,7 @@ class _OnbordingFiveState extends State<OnbordingFive> {
                         bottomLeft: Radius.circular(15.0))),
                 child: Center(
                   child: Image.asset(
-                    'assets/images/bg6.png',
+                    'assets/img5.jpg',
                   ),
                 )),
           ),
@@ -33,7 +33,7 @@ class _OnbordingFiveState extends State<OnbordingFive> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Easy, Fast & Trusted',
+                Text('Please "NOTE"',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',
@@ -41,7 +41,7 @@ class _OnbordingFiveState extends State<OnbordingFive> {
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF1E1E1E))),
                 Text(
-                    'Fast trading and gauranteed safe \n transactions with others.',
+                    'The model utilizes machine learning Techniques and has the potential to generate inaccurate predictions',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',

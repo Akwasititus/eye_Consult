@@ -25,7 +25,7 @@ class _OnbordingTwoState extends State<OnbordingTwo> {
                         bottomLeft: Radius.circular(15.0))),
                 child: Center(
                   child: Image.asset(
-                    'assets/images/bible.png',height: 200,
+                    'assets/img2.jpg',height: 200,
                   ),
                 )),
           ),
@@ -33,7 +33,7 @@ class _OnbordingTwoState extends State<OnbordingTwo> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Inspire me quote',
+                Text('Image Type',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',
@@ -41,11 +41,11 @@ class _OnbordingTwoState extends State<OnbordingTwo> {
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF1E1E1E))),
                 Text(
-                    'These remarkable words of inspiration have been crafted from the pages of the Bible.',
+                    'Feed the Model with a retinal fundus images',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',
-                        fontSize: 13,
+                        fontSize: 15,
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF878787)))
               ],

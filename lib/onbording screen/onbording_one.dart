@@ -40,7 +40,7 @@ class _OnbordingOneState extends State<OnbordingOne> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Introducing the New Inspiration App: \n Explore Bible Quotes to Ignite Your Imagination.',
+                Text('Introducing the New App for detecting glaucoma and retinal fundus images',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Poppins',

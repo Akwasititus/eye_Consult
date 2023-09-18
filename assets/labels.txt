@@ -1,2 +1,2 @@
-0: Glaucoma
-1: Normal
+Glaucoma(0)
+Normal(1)
